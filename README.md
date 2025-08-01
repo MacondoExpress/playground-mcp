@@ -9,6 +9,7 @@ the other packages may have less features.
 ## Build and Development
 
 The repository contains multiple language-specific implementation but a root MakeFile to keep consistency when switching between them:
+Note that the MakeFile is used just as a task-runner; no incremental build is happening.
 
 **Run the TS-MCP-SERVER**
 
@@ -36,7 +37,7 @@ make clean-ts
 make build-go
 ```
 
-**Run the GO-MCP-SERVER build it first**
+**Run the GO-MCP-SERVER**
 
 ```bash
 make run-go
@@ -54,11 +55,9 @@ make inspect-go
 make clean-go
 ```
 
-Note that the MakeFile it is used just a task-runner.
+## Experiment with it
 
-## Play with it
-
-To start playing with it, you can:
+To start experimenting with it, you can:
 
 ### Use the inspector
 
@@ -97,3 +96,36 @@ READ_ONLY=true make inspect-ts
 ```
 
 You should see the debug log `manually handle list/tools`
+
+## Try manually the flow
+
+**initialize**
+
+```bash
+echo '{ "jsonrpc": "2.0", "id": 1, "method": "initialize", "params": { "protocolVersion": "2024-11-05", "capabilities": { "roots": { "listChanged": true }, "sampling": {}, "elicitation": {} }, "clientInfo": { "name": "bash-test", "title": "Bash test", "version": "1.0.0" } } }' | make run-ts
+```
+
+**tool/list**
+
+```bash
+echo '{"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}' | make run-ts
+```
+
+**tool/call**
+
+```bash
+echo '{"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "read-cypher", "arguments": {"cypherQuery": "MATCH (n) RETURN n LIMIT 5"}}}' | make run-ts
+```
+
+**tool/call with server notification**
+
+```bash
+echo '{"jsonrpc": "2.0", "id": 4, "method": "tools/call", "params": { "name": "enable-admin-cypher", "arguments": { "permission": "write" }, "_meta": { "progressToken": 0 } } }' | make run-ts
+```
+
+# Experiments NEXT
+
+- experiment with http server
+- experiment with auth0
+- convert experiments to mark3labs/mcp-go / official SDKs
+- experiment with genai-toolbox

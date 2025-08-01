@@ -1,6 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
@@ -120,7 +119,7 @@ const enableAdminCypher = server.registerTool(
   async ({ permission }) => {
     if (permission === "write") {
       adminCypherTool.enable();
-      enableAdminCypher.disable();
+      enableAdminCypher.remove();
       return {
         content: [
           {
@@ -167,6 +166,8 @@ async function executeQuery(cypher: string, readOnly = true): Promise<string> {
   } catch (e) {
     console.error(`Error while executing Cypher Read:`, e);
     throw e;
+  } finally {
+    driver.close();
   }
 }
 

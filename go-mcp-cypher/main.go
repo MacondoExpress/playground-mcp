@@ -43,6 +43,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
+	fmt.Fprintf(os.Stderr, "Cypher MCP Server running on stdio")
 }
 func handleReadCypher(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	var arguments = request.GetArguments()
