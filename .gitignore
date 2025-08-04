@@ -23,6 +23,8 @@ Thumbs.db
 # JS
 node_modules/
 
-# build folder
+# Misc
+*.debuglog
 
+# build folder
 build/

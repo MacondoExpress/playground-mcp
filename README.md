@@ -123,9 +123,42 @@ echo '{"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "re
 echo '{"jsonrpc": "2.0", "id": 4, "method": "tools/call", "params": { "name": "enable-admin-cypher", "arguments": { "permission": "write" }, "_meta": { "progressToken": 0 } } }' | make run-ts
 ```
 
+**tool/call on disabled tool**
+
+```bash
+echo '{"jsonrpc": "2.0", "id": 5, "method": "tools/call", "params": { "name": "admin-cypher", "arguments": { "cypherQuery": "CREATE(n:User) SET n.name = \"MPC-USER\"", "url": "bolt://localhost:7687" }, "_meta": { "progressToken": 2 } } }' |  make run-ts
+```
+
+### json-rpc-client
+
+The above recreate a new process for each tool calling, to test stateful operation such as the `enable-admin-cypher` -> `admin-cypher` flow,
+I made a really simple REPL JSON-RPC 2.0 client that takes as input the JSON-RPC message and send it to the MCP Server subprocess.
+
+Just run:
+
+```bash
+node json-rpc-client.js node ./ts-mcp-cypher/build/index.js
+```
+
+You will be prompted:
+
+```bash
+Enter JSON-RPC 2.0 message (or "quit" to exit):
+```
+
+Try the flow above, starting from:
+
+```
+{ "jsonrpc": "2.0", "id": 1, "method": "initialize", "params": { "protocolVersion": "2024-11-05", "capabilities": { "roots": { "listChanged": true }, "sampling": {}, "elicitation": {} }, "clientInfo": { "name": "bash-test", "title": "Bash test", "version": "1.0.0" } } }
+```
+
+The `STDERR` is redirected to a file named `json-rpc-client-${pid}.debuglog`
+
 # Experiments NEXT
 
 - experiment with http server
 - experiment with auth0
+- test confirmation as server-initiated elicitation
+- test database discovery tool
 - convert experiments to mark3labs/mcp-go / official SDKs
 - experiment with genai-toolbox
