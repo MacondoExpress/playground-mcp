@@ -209,7 +209,7 @@ export async function createMCPPlaygroundSerer(
       driver.close();
     }
   }
-
+  console.log(`transport: ${transport}`)
   if (transport === "stdio") {
     const transport = new StdioServerTransport();
     await server.connect(transport);

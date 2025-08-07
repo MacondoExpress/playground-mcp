@@ -2,25 +2,28 @@ import { Option, program } from "commander";
 import { createMCPPlaygroundSerer } from "./mcp-cypher-playground.js";
 
 function parseArgs() {
-  // program.addOption(
-  //   new Option(
-  //     "-t, --transport <protocol>",
-  //     "transport protocol used by the MCP server"
-  //   ).choices(["stdio", "http"])
-  // );
-  // program.addOption(
-  //   new Option("-p, --port <port>", "http port used by the MCP server").default(
-  //     3000
-  //   )
-  // );
-  // program.parse();
+  program.addOption(
+    new Option(
+      "-t, --transport <protocol>",
+      "transport protocol used by the MCP server"
+    )
+      .choices(["stdio", "http"])
+      .default("stdio")
+  );
+  program.addOption(
+    new Option("-p, --port <port>", "http port used by the MCP server").default(
+      3000
+    )
+  );
+  program.parse();
 }
 
 async function main() {
   parseArgs();
   const transportProtocol = program.getOptionValue("transport");
   const port = program.getOptionValue("port");
-  await createMCPPlaygroundSerer(transportProtocol, port);
+  const server = await createMCPPlaygroundSerer(transportProtocol, port);
+  console.log(server.isConnected());
 
   console.error(
     `Cypher MCP Server running on ${
