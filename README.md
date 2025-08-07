@@ -61,6 +61,15 @@ To start experimenting with it, you can:
 
 ### Use the inspector
 
+> `make inspect-ts` - A shortcut for `npx @modelcontextprotocol/inspector our-stdio-server`
+>
+> For HTTP transport:
+>
+> 1. Create the HTTP server: `make run-ts ARGS="--transport http"`
+> 2. Run the inspector as a separate process: `npx @modelcontextprotocol/inspector`
+
+#### Inspect STDIO
+
 ```bash
 make inspect-ts
 ```
@@ -69,7 +78,7 @@ You should see a browser tab open with the mcp inspector.
 
 You can do a simple flow such as:
 
-- connect
+- connect (stdio)
 - list tools
 - click on read-cypher
 - click on Run Tool
@@ -77,7 +86,25 @@ You can do a simple flow such as:
 The the server logs are visible in the STDERR visible on the bottom-left of the inspector.
 It is also possible to review the History on the bottom.
 
-### Manually enable tool "Admin Cypher"
+#### Inspect HTTP
+
+Create the server:
+
+```bash
+make run-ts ARGS="--transport http"
+```
+
+Run the inspector separately:
+
+```bash
+`npx @modelcontextprotocol/inspector`
+```
+
+### Manually enable tool "Admin Cypher" (Not important flow - Just used to test sessions impact)
+
+> Ignore this flow, this flow was used to test behaviour when disabling/enabling/removing tools in a multi-client environment
+> Test it with the inspector could be misleading as it creates different session for tab but also different subprocess
+> And tools seems not to be implicitly session bounded.
 
 To demonstrate dynamic tooling for specific session a tool call `enable-admin-cypher` is exposed as a tool.
 
@@ -153,6 +180,31 @@ Try the flow above, starting from:
 ```
 
 The `STDERR` is redirected to a file named `json-rpc-client-${pid}.debuglog`
+
+## Test it with VSCode copilot
+
+> Note the as only read-cypher/write-cypher are exposed with not detailed description
+> and no schema is returned or no list-database is exposed the behavior it's actually limited
+
+Run the http server:
+
+```bash
+make run-ts ARGS="--transport http"
+```
+
+Add it on VSCode:
+**mcp.json**
+
+```json
+{
+  "servers": {
+    "mcp-cypher-playground": {
+      "type": "http",
+      "url": "http://localhost:3000/mcp/"
+    }
+  }
+}
+```
 
 # Experiments NEXT
 
