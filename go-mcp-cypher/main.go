@@ -21,7 +21,7 @@ type ReadCypherArgs struct {
 func main() {
 	// Create a new MCP server
 	mcpServer := server.NewMCPServer(
-		"mcp-cypher",
+		"mcp-cypher-playground",
 		"0.0.1",
 	)
 

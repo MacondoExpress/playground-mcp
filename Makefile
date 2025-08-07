@@ -1,16 +1,18 @@
 # Makefile for MCP Playground
 .PHONY:
 	install-ts
-	run-ts 
+	run-ts
 	build-ts 
 	node-ts 
 	clean-ts
 	inspect-ts
+# GO targets
 	install-go
 	run-go
 	build-go 
 	clean-go
 	inspect-go
+
 
 
 # TypeScript MCP Cypher targets
@@ -24,7 +26,8 @@ node-ts:
 	cd ts-mcp-cypher && node ./build/index.js
 
 run-ts:
-	cd ts-mcp-cypher && yarn build && node ./build/index.js
+	# Change transport protocol: make run-ts ARGS="--transport http"
+	cd ts-mcp-cypher && yarn build && node ./build/index.js $(ARGS)
 	
 inspect-ts:
 	cd ts-mcp-cypher && yarn build && npx @modelcontextprotocol/inspector node ./build/index.js
