@@ -1,5 +1,7 @@
 import { Option, program } from "commander";
 import { createMCPPlaygroundSerer } from "./mcp-cypher-playground.js";
+import dotenv from "dotenv";
+dotenv.config({ path: "../.env" });
 
 function parseArgs() {
   program.addOption(
@@ -22,8 +24,7 @@ async function main() {
   parseArgs();
   const transportProtocol = program.getOptionValue("transport");
   const port = program.getOptionValue("port");
-  const server = await createMCPPlaygroundSerer(transportProtocol, port);
-  console.log(server.isConnected());
+  await createMCPPlaygroundSerer(transportProtocol, port);
 
   console.error(
     `Cypher MCP Server running on ${

@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
@@ -19,6 +20,12 @@ type ReadCypherArgs struct {
 }
 
 func main() {
+	err := godotenv.Load("../.env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	//BANANA := os.Getenv("BANANA")
+	//fmt.Print(BANANA)
 	// Create a new MCP server
 	mcpServer := server.NewMCPServer(
 		"mcp-cypher-playground",
@@ -39,12 +46,14 @@ func main() {
 	mcpServer.AddTool(readCypher, handleReadCypher)
 
 	// Start the server with stdio transport
-	err := server.ServeStdio(mcpServer)
+	err = server.ServeStdio(mcpServer)
 	if err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 	fmt.Fprintf(os.Stderr, "Cypher MCP Server running on stdio")
+	//fmt.Fprintf(os.Stderr, OS.get())
 }
+
 func handleReadCypher(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	var arguments = request.GetArguments()
 

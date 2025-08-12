@@ -26,7 +26,7 @@ node-ts:
 	cd ts-mcp-cypher && node ./build/index.js
 
 run-ts:
-	# Change transport protocol: make run-ts ARGS="--transport http"
+	# Change transport protocol: make run-ts ARGS="--transport stdio"
 	cd ts-mcp-cypher && yarn build && node ./build/index.js $(ARGS)
 	
 inspect-ts:

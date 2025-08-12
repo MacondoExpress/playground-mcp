@@ -208,9 +208,9 @@ Add it on VSCode:
 
 # Experiments NEXT
 
-- experiment with http server
 - experiment with auth0
 - test confirmation as server-initiated elicitation
 - test database discovery tool
 - convert experiments to mark3labs/mcp-go / official SDKs
 - experiment with genai-toolbox
+

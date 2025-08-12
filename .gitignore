@@ -22,6 +22,7 @@ Thumbs.db
 
 # JS
 node_modules/
+yarn-error.log
 
 # Misc
 *.debuglog
