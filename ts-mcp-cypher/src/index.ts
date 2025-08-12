@@ -1,7 +1,7 @@
 import { Option, program } from "commander";
 import { createMCPPlaygroundSerer } from "./mcp-cypher-playground.js";
 import dotenv from "dotenv";
-dotenv.config({ path: "../.env" });
+dotenv.config({ path: "../.env", quiet: true });
 
 function parseArgs() {
   program.addOption(

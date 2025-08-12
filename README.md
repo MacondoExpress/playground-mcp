@@ -97,7 +97,7 @@ make run-ts ARGS="--transport http"
 Run the inspector separately:
 
 ```bash
-`npx @modelcontextprotocol/inspector`
+npx @modelcontextprotocol/inspector
 ```
 
 ### Manually enable tool "Admin Cypher" (Not important flow - Just used to test sessions impact)

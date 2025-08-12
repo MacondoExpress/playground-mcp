@@ -22,7 +22,8 @@ const rl = readline.createInterface({
 
 // Handle child process stdout
 childProcess.stdout.on("data", (data) => {
-  console.log("Response:", data.toString().trim());
+  process.stdout.write(data);
+
   promptForMessage();
 });
 
@@ -55,7 +56,7 @@ function promptForMessage() {
 
     try {
       // Validate JSON format
-      const message = JSON.parse(input);
+      JSON.parse(input);
 
       // Send message to child process
       childProcess.stdin.write(input + "\n");
