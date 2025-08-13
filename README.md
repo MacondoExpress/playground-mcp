@@ -8,6 +8,22 @@ the other packages may have less features.
 
 ## Build and Development
 
+### Setup Environment
+
+Create the root `.env` file with default Neo4j configuration:
+
+```bash
+touch .env
+```
+
+Configure your Environment:
+
+```
+NEO4J_URI="bolt://localhost:7687"
+NEO4J_USERNAME="neo4j"
+NEO4J_PASSWORD="password"
+```
+
 The repository contains multiple language-specific implementation but a root MakeFile to keep consistency when switching between them:
 Note that the MakeFile is used just as a task-runner; no incremental build is happening.
 
@@ -153,7 +169,7 @@ echo '{"jsonrpc": "2.0", "id": 4, "method": "tools/call", "params": { "name": "e
 **tool/call on disabled tool**
 
 ```bash
-echo '{"jsonrpc": "2.0", "id": 5, "method": "tools/call", "params": { "name": "admin-cypher", "arguments": { "cypherQuery": "CREATE(n:User) SET n.name = \"MPC-USER\"", "url": "bolt://localhost:7687" }, "_meta": { "progressToken": 2 } } }' |  make run-ts
+echo '{"jsonrpc": "2.0", "id": 5, "method": "tools/call", "params": { "name": "admin-cypher", "arguments": { "cypherQuery": "CREATE(n:User) SET n.name = \"MPC-USER\"" }, "_meta": { "progressToken": 2 } } }' |  make run-ts
 ```
 
 ### json-rpc-client
@@ -206,11 +222,57 @@ Add it on VSCode:
 }
 ```
 
+or as stdio:
+
+```json
+{
+  "servers": {
+    "mcp-playground": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "{{your-folder}}/MCP-playground/ts-mcp-cypher/build/index.js"
+      ],
+      "env": {
+        "NEO4J_PASSWORD": "your-password"
+      }
+    }
+  }
+}
+```
+
+### Tool Selection with NEO4J_TOOLSET
+
+The `NEO4J_TOOLSET` environment variable can be defined. This demonstrate how an environment variable can be used to enable specific tools.
+
+**Available values:**
+
+- `all` (default) - Registers all available tools: `read-cypher`, `write-cypher`, `admin-cypher`, and `enable-admin-cypher`
+- `read-cypher` - Only the read-only Cypher query tool
+- `write-cypher` - Only the write Cypher query tool
+- `admin-cypher` - Admin Cypher tool plus the enable tool
+- Comma-separated combinations - e.g., `read-cypher,write-cypher` (not trimmed for demonstration, don't add extra spaces)
+
+**Examples:**
+
+```bash
+# Only read operations
+NEO4J_TOOLSET=read-cypher make inspect-ts
+
+# Read and write operations only
+NEO4J_TOOLSET=read-cypher,write-cypher make inspect-ts
+
+# Admin tools only
+NEO4J_TOOLSET=admin-cypher make inspect-ts
+
+# All tools (same as default)
+NEO4J_TOOLSET=all make inspect-ts
+```
+
+Note: When `admin-cypher` is included, the `enable-admin-cypher` tool is automatically registered as well.
+
 # Experiments NEXT
 
-- experiment with auth0
 - test confirmation as server-initiated elicitation
-- test database discovery tool
 - convert experiments to mark3labs/mcp-go / official SDKs
 - experiment with genai-toolbox
-

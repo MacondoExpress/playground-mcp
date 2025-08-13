@@ -29,3 +29,6 @@ yarn-error.log
 
 # build folder
 build/
+
+
+.env
